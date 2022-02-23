@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.form-Input {
+  @apply text-[22px] leading-[30px] font-medium text-slate-800 dark:text-slate-200;
+}
