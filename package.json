@@ -9,13 +9,17 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@hookform/resolvers": "^2.8.8",
     "next": "12.1.0",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "react-hook-form": "^7.27.1",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@types/node": "17.0.19",
     "@types/react": "17.0.39",
+    "@types/yup": "^0.29.13",
     "autoprefixer": "^10.4.2",
     "eslint": "8.9.0",
     "eslint-config-next": "12.1.0",
