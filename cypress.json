@@ -1,1 +1,14 @@
-{}
+{
+  "$schema": "https://on.cypress.io/cypress.schema.json",
+  "baseUrl": "http://localhost:3000",
+  "video": false,
+  "integrationFolder": "tests/e2e",
+  "pluginsFile": false,
+  "supportFile": "tests/support/index.ts",
+  "screenshotsFolder": "tests/screenshots",
+  "fixturesFolder": "tests/fixtures",
+  "env": {
+    "baseUrl": "http://localhost:3000",
+    "apiUrl": "/api/v1"
+  }
+}

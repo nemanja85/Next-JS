@@ -28,7 +28,7 @@ const Dashboard: NextPage<DashboardProps> = ({ todos }) => {
               </thead>
               <tbody>
                 {todos.map((todo) => (
-                  <tr key={todo.id}>
+                  <tr data-cy="row" key={todo.id}>
                     <td>{todo.id}</td>
                     <td>{todo.title}</td>
                     <td>{todo.userId}</td>
@@ -51,13 +51,6 @@ type Todo = {
   completed: boolean;
 };
 
-type Pol = 'm' | 'z';
-
-// Omit helper
-type CreateTodo = Omit<Todo, 'id' | 'completed'>;
-// Pick helper
-type CreateTodoV2 = Pick<Todo, 'title' | 'userId'>;
-
 Dashboard.getInitialProps = async (ctx) => {
   const response = await fetch('https://jsonplaceholder.typicode.com/todos?_limit=20');
   const data = (await response.json()) as Todo[];
@@ -68,8 +61,3 @@ Dashboard.getInitialProps = async (ctx) => {
 };
 
 export default Dashboard;
-const platform = new Map<string, number>([['linux', 1]]);
-
-const a = platform.get('linux');
-
-a?.toExponential();
