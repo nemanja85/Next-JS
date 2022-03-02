@@ -1,13 +1,13 @@
 /// <reference types="cypress" />
 
 describe('Auth', () => {
-  it('should login successfully', () => {
-    cy.login('mark@ds.com', 'kundnschlauf');
+  it('should have proper title', () => {
+    cy.visit('/');
+    cy.title().should('eq', 'Home | Site');
   });
 
-  it('should have', () => {
-    cy.visit('/');
-    cy.title().should('eq', 'Login');
+  it('should login successfully', () => {
+    cy.login('mark@ds.com', 'kundnschlauf');
   });
 
   it('should toggle theme', () => {
