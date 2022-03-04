@@ -8,9 +8,12 @@ import { ValidationError } from 'yup';
 
 type CreateUserResponse = { errors: { field: string; message: string }[] } | { id: number };
 
-type CreateUserRequest = Omit<User, 'id' | 'role' | 'updatedAt' | 'createdAt'>;
+export type CreateUserRequest = Omit<User, 'id' | 'role' | 'updatedAt' | 'createdAt'>;
 
-export const createUser = async (req: NextApiRequest, res: NextApiResponse<CreateUserResponse>) => {
+export const createUser = async (
+  req: NextApiRequest,
+  res: NextApiResponse<CreateUserResponse | { message: string }>
+) => {
   const body = req.body as CreateUserRequest;
   try {
     await schema.validate(body, { abortEarly: false });
@@ -26,14 +29,13 @@ export const createUser = async (req: NextApiRequest, res: NextApiResponse<Creat
 
     return res.status(201).send({ id: result.id });
   } catch (error) {
-    console.log(error);
-    // @ts-ignore
-    switch (error.name) {
+    switch ((error as Error).name) {
       case 'ValidationError':
         return res.status(422).send({ errors: mapErrors(error as ValidationError) });
+      case 'PrismaClientKnownRequestError':
+        return res.status(409).send({ message: 'Email address already exists.' });
       default:
-        // @ts-ignore
-        return res.status(500).send({ error });
+        return res.status(500).send({ message: 'Server Error, please try again.' });
     }
   }
 };
@@ -62,7 +64,7 @@ export const getUser = async (_req: NextApiRequest, res: NextApiResponse, id: nu
   });
 
   if (user === null) {
-    return res.status(404).send({ message: 'User not found' });
+    return res.status(404).send({ message: 'User not found.' });
   }
 
   return res.status(200).send(user);
@@ -76,7 +78,7 @@ export const updateUser = async (req: NextApiRequest, res: NextApiResponse, id: 
   });
 
   if (user === null) {
-    return res.status(404).send({ message: 'User not found' });
+    return res.status(404).send({ message: 'User not found.' });
   }
 
   const body = req.body as CreateUserRequest;
@@ -98,8 +100,6 @@ export const updateUser = async (req: NextApiRequest, res: NextApiResponse, id: 
 
     return res.status(204).send(null);
   } catch (err) {
-    console.log(err);
-
     return res.status(422).send({ errors: mapErrors(err as ValidationError) });
   }
 };
@@ -114,7 +114,6 @@ export const deleteUser = async (res: NextApiResponse, id: number) => {
 
     return res.status(204).send(undefined);
   } catch (err) {
-    // @ts-ignore
-    return res.status(404).send({ message: err.meta.cause });
+    return res.status(404).send({ message: 'User not found.' });
   }
 };

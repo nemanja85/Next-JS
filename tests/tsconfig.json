@@ -1,6 +1,6 @@
 {
   "extends": "../tsconfig.json",
-  "include": ["./**/*.ts", "plugins/index.js"],
+  "include": ["./**/*.ts"],
   "exclude": [],
   "compilerOptions": {
     "strict": true,
