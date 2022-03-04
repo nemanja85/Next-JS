@@ -1,24 +1,17 @@
 import SEO from '@components/SEO/SEO';
 import { useApp } from '@context/AppContext';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { schema } from '@lib/validations';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
-import { object, string } from 'yup';
 
 export type Theme = 'dark' | 'light';
 
 type Payload = {
-  mail: string;
+  email: string;
   password: string;
 };
-
-const schema = object({
-  mail: string().required('Mail is required').email('Invalid email address.'),
-  password: string()
-    .required('Password is required.')
-    .min(8, ({ min }) => `Password must be at least ${min} characters long.`),
-}).required();
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -32,16 +25,27 @@ const Home: NextPage = () => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (data: Payload) => {
-    //
-    persistUser({
-      id: Date.now(),
-      email: data.mail,
-      username: Date.now().toString(),
-      avatar: 'https://eu.ui-avatars.com/api/?name=John+Doe',
+  const onSubmit = async (payload: Payload) => {
+    const response = await fetch('/api/users', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest',
+      },
     });
 
-    router.push('/dashboard?rajko=astooo?');
+    const data = await response.json();
+
+    // persistUser({
+    //   // id: Date.now(),
+    //   // email: data.email,
+    //   // username: Date.now().toString(),
+    //   // avatar: 'https://eu.ui-avatars.com/api/?name=John+Doe',
+    // });
+
+    router.push(`/dashboard?rajko=astooo?&id=${data.id}`);
   };
 
   const handleChange = () => toggleTheme();
@@ -98,9 +102,9 @@ const Home: NextPage = () => {
               <div className="relative z-0 w-full mb-6 group">
                 <input
                   data-cy="email"
-                  {...register('mail')}
+                  {...register('email')}
                   type="text"
-                  name="mail"
+                  name="email"
                   className="block py-2.5 px-0 w-full form-Input text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                   placeholder=" "
                 />
@@ -110,7 +114,7 @@ const Home: NextPage = () => {
                 >
                   Email address
                 </label>
-                <p className="text-red-500">{errors.mail?.message}</p>
+                <p className="text-red-500">{errors.email?.message}</p>
               </div>
               <div className="relative z-0 w-full mb-6 group">
                 <input
