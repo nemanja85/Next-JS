@@ -10,10 +10,10 @@ describe('Users - API', () => {
     it('should return list of users', () => {
       const url = '/api/users';
 
-      cy.request<{ data: User[] }>(url).then((response) => {
-        expect(response.status).to.eq(200);
-        expect(response.body).to.have.property('data');
-        expect(response.body.data).to.be.a('array');
+      cy.request<{ data: User[] }>(url).then(({ status, body }) => {
+        expect(status).to.eq(200);
+        expect(body).to.have.property('data');
+        expect(body.data).to.be.a('array');
       });
     });
 
@@ -21,14 +21,14 @@ describe('Users - API', () => {
       const fields = 'id,email';
       const url = `/api/users?fields=${fields}`;
 
-      cy.request<{ data: User[] }>(url).then((response) => {
-        expect(response.status).to.eq(200);
-        expect(response.body).to.have.property('data');
+      cy.request<{ data: User[] }>(url).then(({ status, body }) => {
+        expect(status).to.eq(200);
+        expect(body).to.have.property('data');
 
-        expect(response.body.data[0].id).to.be.a('number');
-        expect(response.body.data[0].email).to.be.a('string');
-        expect(response.body.data[0].password).to.be.undefined;
-        expect(response.body.data[0].role).not.exist;
+        expect(body.data[0].id).to.be.a('number');
+        expect(body.data[0].email).to.be.a('string');
+        expect(body.data[0].password).to.be.undefined;
+        expect(body.data[0].role).not.exist;
       });
     });
 
@@ -36,12 +36,12 @@ describe('Users - API', () => {
       const id = 1;
       const url = `/api/users/${id}`;
 
-      cy.request<User>(url).then((response) => {
-        expect(response.status).to.eq(200);
+      cy.request<User>(url).then(({ status, body }) => {
+        expect(status).to.eq(200);
 
-        expect(response.body.id).to.be.a('number');
-        expect(response.body.id).to.be.eq(id);
-        expect(response.body.email).to.be.a('string');
+        expect(body.id).to.be.a('number');
+        expect(body.id).to.be.eq(id);
+        expect(body.email).to.be.a('string');
       });
     });
 
@@ -53,11 +53,11 @@ describe('Users - API', () => {
         url,
         method: 'GET',
         failOnStatusCode: false,
-      }).then((response) => {
-        expect(response.status).to.eq(404);
+      }).then(({ status, body }) => {
+        expect(status).to.eq(404);
 
-        expect(response.body.message).to.be.a('string');
-        expect(response.body.message).to.eq('User not found.');
+        expect(body.message).to.be.a('string');
+        expect(body.message).to.eq('User not found.');
       });
     });
   });
@@ -70,10 +70,10 @@ describe('Users - API', () => {
         password: 'test1234',
       };
 
-      cy.request<{ id: number }>('POST', url, payload).then((response) => {
-        expect(response.status).to.eq(201);
-        expect(response.body.id).to.be.a('number');
-        expect(response.body.id).to.gt(0);
+      cy.request<{ id: number }>('POST', url, payload).then(({ status, body }) => {
+        expect(status).to.eq(201);
+        expect(body.id).to.be.a('number');
+        expect(body.id).to.gt(0);
       });
     });
 
@@ -84,10 +84,10 @@ describe('Users - API', () => {
         password: 'test1234',
       };
 
-      cy.request<{ id: number }>('POST', url, payload).then((response) => {
-        expect(response.status).to.eq(201);
-        expect(response.body.id).to.be.a('number');
-        expect(response.body.id).to.gt(0);
+      cy.request<{ id: number }>('POST', url, payload).then(({ status, body }) => {
+        expect(status).to.eq(201);
+        expect(body.id).to.be.a('number');
+        expect(body.id).to.gt(0);
       });
     });
   });
@@ -101,8 +101,8 @@ describe('Users - API', () => {
         password: 'update-test1234',
       };
 
-      cy.request(url).then((response) => {
-        expect(response.body.email).to.eq('test@test.com');
+      cy.request(url).then(({ body }) => {
+        expect(body.email).to.eq('test@test.com');
       });
 
       cy.request({
@@ -164,8 +164,8 @@ describe('Users - API', () => {
       cy.request({
         method: 'DELETE',
         url,
-      }).then((response) => {
-        expect(response.status).to.eq(204);
+      }).then(({ status }) => {
+        expect(status).to.eq(204);
       });
     });
 
@@ -177,9 +177,9 @@ describe('Users - API', () => {
         method: 'DELETE',
         url,
         failOnStatusCode: false,
-      }).then((response) => {
-        expect(response.status).to.eq(404);
-        expect(response.body.message).to.eq('User not found.');
+      }).then(({ status, body }) => {
+        expect(status).to.eq(404);
+        expect(body.message).to.eq('User not found.');
       });
     });
   });

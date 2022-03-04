@@ -7,7 +7,7 @@ describe('Auth', () => {
   });
 
   it('should login successfully', () => {
-    cy.login('mark@ds.com', 'kundnschlauf');
+    cy.login('mark@ds.com', 'kundenschlauf');
   });
 
   it('should toggle theme', () => {
@@ -15,7 +15,7 @@ describe('Auth', () => {
 
     cy.dataCy('toggleTheme').click();
 
-    cy.get('html').should('have.class', 'dark');
+    cy.get('html').should('not.have.class', 'dark');
   });
 
   it('should not have dark theme when double click on toggle theme button', () => {
@@ -23,18 +23,18 @@ describe('Auth', () => {
 
     cy.dataCy('toggleTheme').dblclick();
 
-    cy.get('html').should('not.have.class', 'dark');
+    cy.get('html').should('have.class', 'dark');
   });
 
-  it('should not have dark theme when click programatically on toggle theme button', () => {
+  it('should not have dark theme when click programmatically on toggle theme button', () => {
     cy.visit('/');
 
     cy.dataCy('toggleTheme').click();
 
-    cy.get('html').should('class', 'dark');
+    cy.get('html').should('not.have.class', 'dark');
 
     cy.dataCy('toggleTheme').click();
 
-    cy.get('html').should('not.have.class', 'dark');
+    cy.get('html').should('have.class', 'dark');
   });
 });

@@ -38,12 +38,7 @@ const Home: NextPage = () => {
 
     const data = await response.json();
 
-    // persistUser({
-    //   // id: Date.now(),
-    //   // email: data.email,
-    //   // username: Date.now().toString(),
-    //   // avatar: 'https://eu.ui-avatars.com/api/?name=John+Doe',
-    // });
+    persistUser(data);
 
     router.push(`/dashboard?rajko=astooo?&id=${data.id}`);
   };
@@ -144,7 +139,9 @@ const Home: NextPage = () => {
               </div>
             </form>
           </div>
-          <div className="w-1/2 p-12 bg-gray-500"></div>
+          <div className="w-1/2 bg-gray-500">
+            <img loading="lazy" src="/developers_debugging.png" className="" alt="" />
+          </div>
         </div>
       </div>
     </>
