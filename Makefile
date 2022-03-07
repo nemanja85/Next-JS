@@ -2,3 +2,4 @@
 setup:
 	yarn
 	cp .env.example .env
+

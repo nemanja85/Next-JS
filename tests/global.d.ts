@@ -11,3 +11,7 @@ declare namespace Cypress {
     api(url: string): string;
   }
 }
+
+export type ValidationError = { field: string; message: string };
+
+export type ValidationErrors = ValidationError[];

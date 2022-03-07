@@ -6,7 +6,7 @@ describe('Users - API', () => {
   beforeEach(() => cy.task('db:seed'));
   afterEach(() => cy.task('db:teardown', 'User'));
 
-  context('GET', () => {
+  context('GET /api/users/ | /api/users/:id', () => {
     it('should return list of users', () => {
       const url = '/api/users';
 
@@ -62,7 +62,7 @@ describe('Users - API', () => {
     });
   });
 
-  context('POST', () => {
+  context('POST /api/users', () => {
     it('should insert user successfully', () => {
       const url = `/api/users`;
       const payload = {
@@ -92,7 +92,7 @@ describe('Users - API', () => {
     });
   });
 
-  context('PUT', () => {
+  context('PUT /api/users/:id', () => {
     it('should update user successfully', () => {
       const id = 1;
       const url = `/api/users/${id}`;
@@ -156,7 +156,7 @@ describe('Users - API', () => {
     });
   });
 
-  context('DELETE', () => {
+  context('DELETE /api/users/:id', () => {
     it('should delete user when user exists', () => {
       const id = 1;
       const url = `/api/users/${id}`;
