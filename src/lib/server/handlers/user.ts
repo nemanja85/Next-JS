@@ -32,10 +32,8 @@ export const createUser = async (
     switch ((error as Error).name) {
       case 'ValidationError':
         return res.status(422).send({ errors: mapErrors(error as ValidationError) });
-      case 'PrismaClientKnownRequestError':
-        return res.status(409).send({ message: 'Email address already exists.' });
       default:
-        return res.status(500).send({ message: 'Server Error, please try again.' });
+        return res.status(409).send({ message: 'Email address already exists.' });
     }
   }
 };
