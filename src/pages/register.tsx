@@ -1,6 +1,6 @@
 import SEO from '@components/SEO/SEO';
+import { useApp } from '@context/AppContext';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { object, ref, string } from 'yup';
 
@@ -10,8 +10,6 @@ type RegisterRequest = {
   passwordConfirmation: string;
 };
 
-type NotificationType = 'error' | 'success' | 'warning' | 'information';
-
 const schema = object({
   email: string().required('Email is required'),
   password: string().required('Password is required'),
@@ -19,9 +17,8 @@ const schema = object({
 });
 
 const Register = () => {
-  const [message, setMessage] = useState<string | null>(null);
-  const [notificationType, setNotificationType] = useState<NotificationType | null>(null);
-
+  const { setMessage, setNotificationType, mapColors, resetNotification, message, hasMessage, notificationType } =
+    useApp();
   const {
     register,
     handleSubmit,
@@ -30,8 +27,6 @@ const Register = () => {
   } = useForm<RegisterRequest>({
     resolver: yupResolver(schema),
   });
-
-  const mapColors = (type: NotificationType) => {};
 
   const onSubmit = async (payload: RegisterRequest) => {
     const response = await fetch('/api/users', {
@@ -46,6 +41,9 @@ const Register = () => {
 
     if (response.status > 400) {
       setMessage((await response.json()).message);
+      setNotificationType('error');
+
+      setTimeout(() => resetNotification(), 1500);
       return;
     }
 
@@ -63,8 +61,12 @@ const Register = () => {
 
       <div className="flex flex-col min-h-screen bg-grey-lighter">
         <div className="container flex flex-col items-center justify-center flex-1 max-w-sm px-2 mx-auto">
-          {message !== null && (
-            <div className="w-full p-5 my-4 border-2 border-gray-800 rounded-xl dark:border-gray-200">
+          {hasMessage && (
+            <div
+              className={`w-full p-5 my-4 border-2 border-gray-800 rounded-xl ${mapColors(
+                notificationType!
+              )} dark:border-gray-200`}
+            >
               <p className="text-center text-gray-800 dark:text-gray-100">Message: {message}</p>
             </div>
           )}
