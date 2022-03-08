@@ -42,3 +42,5 @@ learn-cypress
 
 /prisma/migrations/**
 /prisma/dev.db
+
+/keys

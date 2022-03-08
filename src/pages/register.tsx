@@ -10,6 +10,8 @@ type RegisterRequest = {
   passwordConfirmation: string;
 };
 
+type NotificationType = 'error' | 'success' | 'warning' | 'information';
+
 const schema = object({
   email: string().required('Email is required'),
   password: string().required('Password is required'),
@@ -18,6 +20,7 @@ const schema = object({
 
 const Register = () => {
   const [message, setMessage] = useState<string | null>(null);
+  const [notificationType, setNotificationType] = useState<NotificationType | null>(null);
 
   const {
     register,
@@ -27,6 +30,8 @@ const Register = () => {
   } = useForm<RegisterRequest>({
     resolver: yupResolver(schema),
   });
+
+  const mapColors = (type: NotificationType) => {};
 
   const onSubmit = async (payload: RegisterRequest) => {
     const response = await fetch('/api/users', {
@@ -59,8 +64,8 @@ const Register = () => {
       <div className="flex flex-col min-h-screen bg-grey-lighter">
         <div className="container flex flex-col items-center justify-center flex-1 max-w-sm px-2 mx-auto">
           {message !== null && (
-            <div className="w-full p-5 my-4 border border-gray-200">
-              <p className="text-center text-gray-100">Message: {message}</p>
+            <div className="w-full p-5 my-4 border-2 border-gray-800 rounded-xl dark:border-gray-200">
+              <p className="text-center text-gray-800 dark:text-gray-100">Message: {message}</p>
             </div>
           )}
 
