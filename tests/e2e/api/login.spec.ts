@@ -1,8 +1,13 @@
 /// <reference types="cypress" />
 
-import { ValidationErrors } from 'tests/global';
+type ValidationError = { field: string; message: string };
+
+type ValidationErrors = ValidationError[];
 
 describe('Login - API', () => {
+  beforeEach(() => cy.task('db:seed'));
+  afterEach(() => cy.task('db:teardown', 'User'));
+
   it('Should return validation errors', () => {
     const payload = {
       email: '',
@@ -40,7 +45,7 @@ describe('Login - API', () => {
 
   it('should not return user when password is invalid', () => {
     const payload = {
-      email: 'mark@ds.com',
+      email: 'test@test.com',
       password: 'rgxed5bedr6556edryhcrftyhcrftyhrhdtrhd',
     };
 
@@ -57,7 +62,7 @@ describe('Login - API', () => {
 
   it('should return token when login is successfully', () => {
     const payload = {
-      email: 'mark@ds.com',
+      email: 'test@test.com',
       password: 'password',
     };
 

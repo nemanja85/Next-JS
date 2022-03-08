@@ -7,7 +7,12 @@ type RegisterRequest = {
 };
 
 describe('Register', () => {
-  beforeEach(() => cy.visit('/register'));
+  beforeEach(() => {
+    cy.task('db:seed');
+    cy.visit('/register');
+  });
+
+  afterEach(() => cy.task('db:teardown', 'User'));
 
   it('should register new account', () => {
     const payload = {
@@ -30,11 +35,11 @@ describe('Register', () => {
     });
   });
 
-  it('should display error when email exist', () => {
+  it('should display error when email exists', () => {
     const payload = {
-      email: 'test@mailinator.com',
-      password: '123',
-      confirmPassword: '123',
+      email: 'test@test.com',
+      password: 'password',
+      confirmPassword: 'password',
     } as RegisterRequest;
 
     cy.intercept({ method: 'POST', url: '/api/users' }).as('register');

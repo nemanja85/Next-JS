@@ -40,7 +40,7 @@ const Home: NextPage = () => {
 
     persistUser(data);
 
-    router.push(`/dashboard?rajko=astooo?&id=${data.id}`);
+    router.push('/dashboard');
   };
 
   const handleChange = () => toggleTheme();
