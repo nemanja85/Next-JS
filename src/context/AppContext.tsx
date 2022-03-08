@@ -130,7 +130,5 @@ export const AppProvider: FC = ({ children }) => {
     setNotificationType,
   } as AppContextType;
 
-  console.log(value);
-
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };

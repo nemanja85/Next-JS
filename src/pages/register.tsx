@@ -74,6 +74,7 @@ const Register = () => {
           <div className="w-full px-6 py-8 text-black bg-white rounded shadow-md">
             <form onSubmit={handleSubmit(onSubmit)}>
               <input
+                data-cy="email"
                 type="text"
                 className="block w-full p-3 mb-4 border rounded border-grey-light"
                 placeholder="Email"
@@ -83,6 +84,7 @@ const Register = () => {
               {errors.email && <p className="text-red-500">{errors.email.message}</p>}
 
               <input
+                data-cy="password"
                 type="password"
                 className="block w-full p-3 mb-4 border rounded border-grey-light"
                 placeholder="Password"
@@ -92,6 +94,7 @@ const Register = () => {
               {errors.password && <p className="text-red-500">{errors.password.message}</p>}
 
               <input
+                data-cy="confirm_password"
                 type="password"
                 className="block w-full p-3 mb-4 border rounded border-grey-light"
                 placeholder="Confirm Password"
@@ -101,6 +104,7 @@ const Register = () => {
               {errors.passwordConfirmation && <p className="text-red-500">{errors.passwordConfirmation.message}</p>}
 
               <button
+                data-cy="submit"
                 type="submit"
                 className="w-full py-3 my-1 text-center text-white bg-green-500 rounded hover:bg-green-dark focus:outline-none"
               >
