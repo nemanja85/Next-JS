@@ -10,5 +10,11 @@
   "env": {
     "baseUrl": "http://localhost:3000",
     "apiUrl": "/api/v1"
+  },
+  "reporterOptions": {
+    "reportDir": "tests/results",
+    "overwrite": false,
+    "html": true,
+    "json": true
   }
 }

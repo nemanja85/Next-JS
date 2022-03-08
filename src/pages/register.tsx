@@ -63,11 +63,14 @@ const Register = () => {
         <div className="container flex flex-col items-center justify-center flex-1 max-w-sm px-2 mx-auto">
           {hasMessage && (
             <div
+              data-cy="notificationContainer"
               className={`w-full p-5 my-4 border-2 border-gray-800 rounded-xl ${mapColors(
                 notificationType!
               )} dark:border-gray-200`}
             >
-              <p className="text-center text-gray-800 dark:text-gray-100">Message: {message}</p>
+              <p data-cy="notificationMessage" className="text-center text-gray-800 dark:text-gray-100">
+                {message}
+              </p>
             </div>
           )}
 

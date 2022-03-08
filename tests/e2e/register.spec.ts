@@ -53,6 +53,9 @@ describe('Register', () => {
     cy.wait('@register').then(({ response }) => {
       expect(response?.statusCode).to.be.eq(409);
       expect(response?.body.message).to.be.eq('Email address already exists.');
+      cy.dataCy('notificationMessage').should('be.visible');
+      cy.dataCy('notificationMessage').should('have.text', 'Email address already exists.');
+      cy.dataCy('notificationContainer').should('have.class', 'bg-red-500');
     });
   });
 });
