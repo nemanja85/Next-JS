@@ -12,12 +12,24 @@ type DashboardProps = {
 const Dashboard: NextPage<DashboardProps> = ({ todos }) => {
   const { user } = useApp();
 
+  const fetchUsers = async () => {
+    const response = await fetch('/api/users');
+
+    const data = await response.json();
+
+    console.log(data);
+  };
+
   return (
     <>
       <div className="container mx-auto">
         <Link href="/">
           <a>Login</a>
         </Link>
+
+        <button className="px-4 py-2 text-gray-100 bg-red-500 rounded" onClick={fetchUsers}>
+          Refresh
+        </button>
         <h1 className="text-4xl text-center dark:text-gray-200">Dashboard, Hi {user?.email}</h1>
 
         <div className="flex items-center justify-center min">

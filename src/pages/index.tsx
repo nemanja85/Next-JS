@@ -30,7 +30,7 @@ const Home: NextPage = () => {
   });
 
   const onSubmit = async (payload: Payload) => {
-    const response = await fetch('/api/users', {
+    const response = await fetch('/api/auth/login', {
       method: 'POST',
       body: JSON.stringify(payload),
       headers: {

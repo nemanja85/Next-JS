@@ -2,6 +2,7 @@ import { prisma } from '@lib/prisma';
 import { mapErrors } from '@lib/utils';
 import { schema } from '@lib/validations';
 import { compare } from 'bcryptjs';
+import { setCookies } from 'cookies-next';
 import { randomUUID } from 'crypto';
 import { readFile } from 'fs/promises';
 import { sign, SignOptions } from 'jsonwebtoken';
@@ -60,6 +61,15 @@ export const login = async (req: NextApiRequest, res: NextApiResponse) => {
         return res.status(400).json({ message: 'Error while generating JWT.' });
       }
 
+      setCookies('token', token, {
+        req,
+        res,
+        path: '/',
+        sameSite: 'lax',
+        httpOnly: true,
+        maxAge: 86400, // day in seconds
+      });
+      // res.setHeader('Set-Cookie', '');
       return res.status(200).json({
         token,
       });
