@@ -1,6 +1,6 @@
+import { useApp } from '@context/AppContext';
 import { NextPage } from 'next';
 import Link from 'next/link';
-import { useApp } from '../context/AppContext';
 
 // Reference
 // string, number, boolean, object, Record<K,V>, Map<K,V>, Set<K,V>, Type | Interface, Enum, Array<T>, T[]
@@ -22,7 +22,7 @@ const Dashboard: NextPage<DashboardProps> = ({ todos }) => {
 
         <div className="flex items-center justify-center min">
           <div>
-            {todos.length === 0 && <p>No todos records</p>}
+            {todos.length === 0 && <p>No todos left</p>}
 
             {todos.length > 0 && (
               <table className="my-8">
@@ -44,7 +44,7 @@ const Dashboard: NextPage<DashboardProps> = ({ todos }) => {
                       <td>{todo.id}</td>
                       <td>{todo.title}</td>
                       <td>{todo.userId}</td>
-                      <td>{todo.completed ? 'completed' : 'incompleted'}</td>
+                      <td>{todo.completed ? 'completed' : 'incomplete'}</td>
                     </tr>
                   ))}
                 </tbody>
