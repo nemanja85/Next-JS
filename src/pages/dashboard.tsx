@@ -34,29 +34,56 @@ const Dashboard: NextPage<DashboardProps> = ({ todos }) => {
 
         <div className="flex items-center justify-center min">
           <div>
-            {todos.length === 0 && <p>No todos left</p>}
+            {todos.length === 0 && <p>No records left</p>}
 
             {todos.length > 0 && (
-              <table className="my-8">
-                <thead className="font-bold text-gray-800">
+              <table className="table-fixed">
+                <thead className="bg-gray-50 dark:bg-gray-700">
                   <tr>
-                    <th className="border border-gray-800 dark:text-gray-200 dark:border-gray-200">ID</th>
-                    <th className="border border-gray-800 dark:text-gray-200 dark:border-gray-200">Title</th>
-                    <th className="border border-gray-800 dark:text-gray-200 dark:border-gray-200">User</th>
-                    <th className="border border-gray-800 dark:text-gray-200 dark:border-gray-200">Completed</th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400"
+                    >
+                      ID
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400"
+                    >
+                      Title
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400"
+                    >
+                      User
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400"
+                    >
+                      Completed
+                    </th>
+                    <th scope="col" className="relative px-6 py-3">
+                      <span className="sr-only">Edit</span>
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {todos.map((todo) => (
-                    <tr
-                      className="text-gray-800 border border-gray-800 dark:text-gray-200 dark:border-gray-200"
-                      data-cy="row"
-                      key={todo.id}
-                    >
-                      <td>{todo.id}</td>
-                      <td>{todo.title}</td>
-                      <td>{todo.userId}</td>
-                      <td>{todo.completed ? 'completed' : 'incomplete'}</td>
+                    <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700" data-cy="row" key={todo.id}>
+                      <td className="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        {todo.id}
+                      </td>
+                      <td className="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        {todo.title}
+                      </td>
+                      <td className="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        {todo.userId}
+                      </td>
+                      <td className="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        {todo.completed ? 'completed' : 'incomplete'}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
