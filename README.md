@@ -19,3 +19,6 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 * Website: https://stefanbogdanovic.dev
 * Github: [@CerealKiller97](https://github.com/CerealKiller97)
 * LinkedIn: [@Stefan Bogdanovic](https://linkedin.com/in/bogdanovic-stefan)
+
+
+Give a ⭐️ if this project helped you!
