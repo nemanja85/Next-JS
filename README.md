@@ -6,6 +6,7 @@
   </a>
 </p>
 
+>Testing out NEXT JS, Prisma, Typescript, Tailwind and Cypress
 
 ## Getting Started
 
