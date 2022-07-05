@@ -11,6 +11,16 @@
 ## Getting Started
 
 ```sh
+git clone https://github.com/nemanja85/Next-JS.git
+```
+```sh
+cd NEXT-JS
+```
+```sh
+yarn install
+```
+
+```sh
 yarn dev
 ```
 
