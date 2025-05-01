@@ -8,17 +8,24 @@
 
 >Testing out NEXT JS, Prisma, Typescript, Tailwind and Cypress
 
-## Getting Started
+## 1. Clone the project
 
 ```sh
 git clone https://github.com/nemanja85/Next-JS.git
 ```
+## 2. Navigate to the repository
+
 ```sh
 cd NEXT-JS
 ```
+## 3. Install the required dependecies
+
 ```sh
 yarn install
 ```
+
+## Running the Project
+### To start the project, use the following command:
 
 ```sh
 yarn dev
