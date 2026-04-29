@@ -1,12 +1,12 @@
 import { authMiddleware } from '@lib/server/middlewares/auth';
-import { removeCookies } from 'cookies-next';
+import { deleteCookie } from 'cookies-next';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  authMiddleware(req, res);
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (!(await authMiddleware(req, res))) return;
 
   if (req.method === 'POST') {
-    removeCookies('token', { req, res });
+    deleteCookie('token', { req, res });
     return res.status(200).json({ message: 'You have logged out successfully.' });
   }
 }

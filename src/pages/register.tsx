@@ -13,7 +13,9 @@ type RegisterRequest = {
 const schema = object({
   email: string().required('Email is required'),
   password: string().required('Password is required'),
-  passwordConfirmation: string().oneOf([ref('password'), null], 'Passwords must match'),
+  passwordConfirmation: string()
+    .oneOf([ref('password')], 'Passwords must match')
+    .required('Confirm Password is required'),
 });
 
 const Register = () => {

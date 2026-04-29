@@ -1,16 +1,15 @@
 import { PrismaClient } from '@prisma/client';
 
-export const prisma = new PrismaClient();
-
-// Logging Middleware
-prisma.$use(async (params, next) => {
-  const before = Date.now();
-
-  const result = await next(params);
-
-  const after = Date.now();
-
-  console.log(`Query ${params.model}.${params.action} took ${after - before}ms`);
-
-  return result;
+export const prisma = new PrismaClient().$extends({
+  query: {
+    $allModels: {
+      async $allOperations({ model, operation, args, query }) {
+        const before = Date.now();
+        const result = await query(args);
+        const after = Date.now();
+        console.log(`Query ${model}.${operation} took ${after - before}ms`);
+        return result;
+      },
+    },
+  },
 });

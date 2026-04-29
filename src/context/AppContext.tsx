@@ -1,4 +1,4 @@
-import { createContext, FC, useContext, useEffect, useState } from 'react';
+import { createContext, FC, PropsWithChildren, useContext, useEffect, useState } from 'react';
 import { isBrowser, localStorageSecure } from '../lib/utils';
 import { Theme } from '../pages';
 
@@ -68,7 +68,7 @@ const AppContext = createContext<AppContextType>({
 
 export const useApp = () => useContext(AppContext);
 
-export const AppProvider: FC = ({ children }) => {
+export const AppProvider: FC<PropsWithChildren> = ({ children }) => {
   const [user, setUser] = useState(defaultValues.user);
   const [theme, setTheme] = useState(defaultValues.theme);
   const [message, setMessage] = useState<string | null>(defaultValues.message);

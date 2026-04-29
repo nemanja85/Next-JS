@@ -4,11 +4,9 @@ import { useApp } from '@context/AppContext';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { schema } from '@lib/validations';
 import type { NextPage } from 'next';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import AppLayout from 'src/layouts/AppLayout';
-import image from '../../public/developers_debugging.png';
 
 export type Theme = 'dark' | 'light';
 
@@ -104,7 +102,7 @@ const Home: NextPage = () => {
             </form>
           </div>
           <div className="w-1/2 bg-gray-500">
-            <Image src={image} alt="Developers" />
+            <img src="/developers_debugging.png" alt="Developers" />
           </div>
         </div>
       </div>

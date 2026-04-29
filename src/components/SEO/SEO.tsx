@@ -16,8 +16,18 @@ const SEO = ({ title, description, keywords, noIndex = false }: SeoProps) => {
     <Head>
       <meta charSet="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-      {noIndex && <meta name="robots" content="noindex, nofollow"> <meta name="googlebot" content="noindex, nofollow" />}
-      {!noIndex && <meta name="robots" content="index, follow"> <meta name="googlebot" content="index, follow" />}
+      {noIndex && (
+        <>
+          <meta name="robots" content="noindex, nofollow" />
+          <meta name="googlebot" content="noindex, nofollow" />
+        </>
+      )}
+      {!noIndex && (
+        <>
+          <meta name="robots" content="index, follow" />
+          <meta name="googlebot" content="index, follow" />
+        </>
+      )}
 
       <title>{`${title} | ${config.seo.title}`}</title>
       <meta name="description" content={description} />
