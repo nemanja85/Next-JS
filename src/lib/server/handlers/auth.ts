@@ -1,11 +1,7 @@
-import { prisma } from '@lib/prisma';
+import { AuthError, loginUser } from '@lib/server/services/auth.service';
+import { setAuthCookie } from '@lib/server/services/jwt';
 import { mapErrors } from '@lib/utils';
 import { schema } from '@lib/validations';
-import { compare } from 'bcryptjs';
-import { setCookie } from 'cookies-next';
-import { randomUUID } from 'crypto';
-import { readFile } from 'fs/promises';
-import { sign, SignOptions } from 'jsonwebtoken';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { ValidationError } from 'yup';
 
@@ -20,66 +16,28 @@ export const login = async (req: NextApiRequest, res: NextApiResponse) => {
 
     await schema.validate(body, { abortEarly: false });
 
-    const user = await prisma.user.findUnique({
-      where: {
-        email: body.email,
-      },
-    });
+    const { token } = await loginUser(body);
 
-    if (!user) {
-      return res.status(400).json({
-        message: 'No User in database',
-      });
-    }
+    setAuthCookie(req, res, token);
 
-    const passwordMatches = await compare(body.password, user.password);
-
-    if (!passwordMatches) {
-      return res.status(400).json({
-        message: 'Password kaput',
-      });
-    }
-
-    const payload = {
-      role: user.role,
-    };
-
-    const secret = await readFile(`${process.cwd()}/keys/private.pem`);
-
-    const options = {
-      algorithm: 'RS256',
-      expiresIn: '1h',
-      issuer: 'NextJS',
-      jwtid: randomUUID(),
-      subject: user.id.toString(),
-    } as SignOptions;
-
-    sign(payload, secret, options, (err, token) => {
-      if (err) {
-        console.log(err);
-
-        return res.status(400).json({ message: 'Error while generating JWT.' });
-      }
-
-      setCookie('token', token, {
-        req,
-        res,
-        path: '/',
-        sameSite: 'lax',
-        httpOnly: true,
-        maxAge: 86400, // day in seconds
-      });
-      // res.setHeader('Set-Cookie', '');
-      return res.status(200).json({
-        token,
-      });
+    return res.status(200).json({
+      token,
     });
   } catch (err) {
-    switch ((err as Error).name) {
-      case 'ValidationError':
-        return res.status(422).send({
-          errors: mapErrors(err as ValidationError),
-        });
+    if (err instanceof AuthError) {
+      return res.status(err.statusCode).json({
+        message: err.message,
+      });
     }
+
+    if ((err as Error).name === 'ValidationError') {
+      return res.status(422).send({
+        errors: mapErrors(err as ValidationError),
+      });
+    }
+
+    return res.status(500).json({
+      message: 'Internal server error',
+    });
   }
 };

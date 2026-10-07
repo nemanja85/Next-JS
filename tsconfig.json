@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "target": "es5",
     "lib": [
       "dom",
       "dom.iterable",
@@ -20,18 +19,21 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "incremental": true,
-    "baseUrl": ".",
     "paths": {
       "@context/*": [
-        "src/context/*"
+        "./src/context/*"
       ],
       "@components/*": [
-        "src/components/*"
+        "./src/components/*"
+      ],
+      "@layouts/*": [
+        "./src/layouts/*"
       ],
       "@lib/*": [
-        "src/lib/*"
+        "./src/lib/*"
       ]
-    }
+    },
+    "target": "ES2017"
   },
   "include": [
     "next-env.d.ts",

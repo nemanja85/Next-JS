@@ -6,7 +6,7 @@ import { schema } from '@lib/validations';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
-import AppLayout from 'src/layouts/AppLayout';
+import AppLayout from '@layouts/AppLayout';
 
 export type Theme = 'dark' | 'light';
 

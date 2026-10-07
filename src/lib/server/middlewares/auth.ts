@@ -1,12 +1,11 @@
-import { readFile } from 'fs/promises';
-import { JwtPayload, verify } from 'jsonwebtoken';
+import { verifyToken } from '@lib/server/services/jwt';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 type Response = {
   message: string;
 };
 
-export const authMiddleware = async (req: NextApiRequest, res: NextApiResponse<Response>) => {
+export const authMiddleware = async (req: NextApiRequest, res: NextApiResponse<Response>): Promise<boolean> => {
   let token = req.cookies.token;
 
   const authHeader = req.headers.authorization;
@@ -24,20 +23,20 @@ export const authMiddleware = async (req: NextApiRequest, res: NextApiResponse<R
   }
 
   try {
-    const key = await readFile(`${process.cwd()}/keys/public.pem`);
-    const payload = verify(token, key, {
-      algorithms: ['RS256'],
-      issuer: 'NextJS',
-    }) as JwtPayload;
+    const payload = await verifyToken(token);
 
-    if (Date.now() >= payload.exp! * 1000) {
+    if (payload.exp && Date.now() >= payload.exp * 1000) {
       console.log('Token has expired.');
-
       res.status(401).send({ message: 'You are unauthorized.' });
       return false;
     }
     return true;
   } catch (err) {
+    if ((err as Error).name === 'TokenExpiredError') {
+      res.status(401).send({ message: 'You are unauthorized.' });
+      return false;
+    }
+
     res.status(400).send({ message: 'Only bearer (JWT) tokens allowed.' });
     return false;
   }

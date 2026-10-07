@@ -1,8 +1,7 @@
-import { prisma } from '@lib/prisma';
-import { mapErrors, mapFilter } from '@lib/utils';
+import * as userService from '@lib/server/services/user.service';
+import { mapErrors } from '@lib/utils';
 import { schema } from '@lib/validations';
 import { User } from '@prisma/client';
-import { hash } from 'bcryptjs';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { ValidationError } from 'yup';
 
@@ -18,13 +17,9 @@ export const createUser = async (
   try {
     await schema.validate(body, { abortEarly: false });
 
-    const hashedPassword = await hash(body.password, 10);
-
-    const result = await prisma.user.create({
-      data: {
-        email: body.email,
-        password: hashedPassword,
-      },
+    const result = await userService.createUser({
+      email: body.email,
+      password: body.password,
     });
 
     return res.status(201).send({ id: result.id });
@@ -39,27 +34,14 @@ export const createUser = async (
 };
 
 export const getUsers = async (req: NextApiRequest, res: NextApiResponse) => {
-  const fields = req.query.fields as string;
+  const fields = req.query.fields as string | undefined;
+  const users = await userService.findManyUsers(fields);
 
-  const mappings = mapFilter<User>(fields?.split(',') as Array<keyof User>);
-
-  const args = {} as Record<any, string>;
-
-  if (Object.keys(mappings).length > 0) {
-    // @ts-ignore
-    args['select'] = mappings;
-  }
-
-  // @ts-ignore
-  return res.status(200).send({ data: await prisma.user.findMany(args) });
+  return res.status(200).send({ data: users });
 };
 
 export const getUser = async (_req: NextApiRequest, res: NextApiResponse, id: number) => {
-  const user = await prisma.user.findFirst({
-    where: {
-      id,
-    },
-  });
+  const user = await userService.findUserById(id);
 
   if (user === null) {
     return res.status(404).send({ message: 'User not found.' });
@@ -69,11 +51,7 @@ export const getUser = async (_req: NextApiRequest, res: NextApiResponse, id: nu
 };
 
 export const updateUser = async (req: NextApiRequest, res: NextApiResponse, id: number) => {
-  const user = await prisma.user.findFirst({
-    where: {
-      id,
-    },
-  });
+  const user = await userService.findUserById(id);
 
   if (user === null) {
     return res.status(404).send({ message: 'User not found.' });
@@ -84,16 +62,9 @@ export const updateUser = async (req: NextApiRequest, res: NextApiResponse, id: 
   try {
     await schema.validate(body, { abortEarly: false });
 
-    const hashedPassword = await hash(body.password, 10);
-
-    await prisma.user.update({
-      data: {
-        email: body.email,
-        password: hashedPassword,
-      },
-      where: {
-        id,
-      },
+    await userService.updateUser(id, {
+      email: body.email,
+      password: body.password,
     });
 
     return res.status(204).send(null);
@@ -104,11 +75,7 @@ export const updateUser = async (req: NextApiRequest, res: NextApiResponse, id: 
 
 export const deleteUser = async (res: NextApiResponse, id: number) => {
   try {
-    await prisma.user.delete({
-      where: {
-        id,
-      },
-    });
+    await userService.deleteUser(id);
 
     return res.status(204).send(undefined);
   } catch (err) {

@@ -1,5 +1,5 @@
 import { defineConfig } from 'cypress';
-import { prisma } from './src/lib/prisma';
+import { prisma } from '@lib/prisma';
 
 export default defineConfig({
   e2e: {
