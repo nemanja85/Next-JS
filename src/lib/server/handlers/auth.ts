@@ -3,12 +3,9 @@ import { setAuthCookie } from '@lib/server/services/jwt';
 import { mapErrors } from '@lib/utils';
 import { schema } from '@lib/validations';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { ValidationError } from 'yup';
+import { InferType, ValidationError } from 'yup';
 
-type LoginRequest = {
-  email: string;
-  password: string;
-};
+type LoginRequest = InferType<typeof schema>;
 
 export const login = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
@@ -30,8 +27,8 @@ export const login = async (req: NextApiRequest, res: NextApiResponse) => {
       });
     }
 
-    if ((err as Error).name === 'ValidationError') {
-      return res.status(422).send({
+    if (err instanceof ValidationError || (err as Error).name === 'ValidationError') {
+      return res.status(422).json({
         errors: mapErrors(err as ValidationError),
       });
     }
