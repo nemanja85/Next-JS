@@ -1,5 +1,5 @@
 import { createContext, FC, PropsWithChildren, useContext, useEffect, useState } from 'react';
-import { isBrowser, localStorageSecure } from '../lib/utils';
+import { isBrowser, localStorageSecure } from '@lib/utils';
 import { Theme } from '../pages';
 
 export type NotificationType = 'error' | 'success' | 'warning' | 'information';

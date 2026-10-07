@@ -1,7 +1,7 @@
 import * as userService from '@lib/server/services/user.service';
 import { mapErrors } from '@lib/utils';
 import { schema } from '@lib/validations';
-import { User } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { ValidationError } from 'yup';
 
@@ -22,41 +22,46 @@ export const createUser = async (
       password: body.password,
     });
 
-    return res.status(201).send({ id: result.id });
+    return res.status(201).json({ id: result.id });
   } catch (error) {
-    switch ((error as Error).name) {
-      case 'ValidationError':
-        return res.status(422).send({ errors: mapErrors(error as ValidationError) });
-      default:
-        return res.status(409).send({ message: 'Email address already exists.' });
+    if ((error as Error).name === 'ValidationError') {
+      return res.status(422).json({ errors: mapErrors(error as ValidationError) });
     }
+
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+      return res.status(409).json({ message: 'Email address already exists.' });
+    }
+
+    return res.status(500).json({ message: 'Internal server error' });
   }
 };
 
 export const getUsers = async (req: NextApiRequest, res: NextApiResponse) => {
-  const fields = req.query.fields as string | undefined;
-  const users = await userService.findManyUsers(fields);
+  try {
+    const fields = req.query.fields as string | undefined;
+    const users = await userService.findManyUsers(fields);
 
-  return res.status(200).send({ data: users });
+    return res.status(200).json({ data: users });
+  } catch (error) {
+    return res.status(500).json({ message: 'Internal server error' });
+  }
 };
 
 export const getUser = async (_req: NextApiRequest, res: NextApiResponse, id: number) => {
-  const user = await userService.findUserById(id);
+  try {
+    const user = await userService.findUserById(id);
 
-  if (user === null) {
-    return res.status(404).send({ message: 'User not found.' });
+    if (user === null) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    return res.status(200).json(user);
+  } catch (error) {
+    return res.status(500).json({ message: 'Internal server error' });
   }
-
-  return res.status(200).send(user);
 };
 
 export const updateUser = async (req: NextApiRequest, res: NextApiResponse, id: number) => {
-  const user = await userService.findUserById(id);
-
-  if (user === null) {
-    return res.status(404).send({ message: 'User not found.' });
-  }
-
   const body = req.body as CreateUserRequest;
 
   try {
@@ -67,9 +72,22 @@ export const updateUser = async (req: NextApiRequest, res: NextApiResponse, id: 
       password: body.password,
     });
 
-    return res.status(204).send(null);
+    return res.status(204).end();
   } catch (err) {
-    return res.status(422).send({ errors: mapErrors(err as ValidationError) });
+    if ((err as Error).name === 'ValidationError') {
+      return res.status(422).json({ errors: mapErrors(err as ValidationError) });
+    }
+
+    if (err instanceof Prisma.PrismaClientKnownRequestError) {
+      if (err.code === 'P2025') {
+        return res.status(404).json({ message: 'User not found.' });
+      }
+      if (err.code === 'P2002') {
+        return res.status(409).json({ message: 'Email address already exists.' });
+      }
+    }
+
+    return res.status(500).json({ message: 'Internal server error' });
   }
 };
 
@@ -77,8 +95,12 @@ export const deleteUser = async (res: NextApiResponse, id: number) => {
   try {
     await userService.deleteUser(id);
 
-    return res.status(204).send(undefined);
+    return res.status(204).end();
   } catch (err) {
-    return res.status(404).send({ message: 'User not found.' });
+    if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2025') {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    return res.status(500).json({ message: 'Internal server error' });
   }
 };
