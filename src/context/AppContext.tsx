@@ -25,8 +25,17 @@ type AppContextType = {
   mapColors: (type: NotificationType) => string;
 };
 
-const userLocal = localStorageSecure('user');
-const themeLocal = localStorageSecure('theme');
+const getUserLocal = (): User | null => {
+  const user = localStorageSecure('user');
+  if (!user) return null;
+  try {
+    return JSON.parse(user) as User;
+  } catch {
+    return null;
+  }
+};
+
+const themeLocal = localStorageSecure('theme') as Theme | null;
 
 const userPrefersDark = () => {
   if (isBrowser()) {
@@ -39,7 +48,7 @@ const userPrefersDark = () => {
 const userPreference = userPrefersDark();
 
 const defaultValues = {
-  user: userLocal ? (JSON.parse(userLocal) as User) : null,
+  user: getUserLocal(),
   theme: themeLocal ?? (userPreference ? 'dark' : 'light'),
   toggleTheme: () => {},
   persistUser: () => {},

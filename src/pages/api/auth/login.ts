@@ -3,6 +3,9 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
-    await login(req, res);
+    return await login(req, res);
   }
+
+  res.setHeader('Allow', ['POST']);
+  return res.status(405).json({ message: `Method ${req.method} Not Allowed` });
 }

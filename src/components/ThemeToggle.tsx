@@ -6,7 +6,7 @@ export const ThemeToggle = () => {
   return (
     <button
       data-cy="toggleTheme"
-      className="px-8 py-4 text-sm bg-yellow-500 text-yellow-1 00 dark:bg-green-800"
+      className="px-8 py-4 text-sm bg-yellow-500 text-yellow-100 dark:bg-green-800"
       onClick={toggleTheme}
     >
       {theme === 'dark' ? (

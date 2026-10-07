@@ -3,11 +3,13 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
-    // if (!(await authMiddleware(req, res))) return;
-    await getUsers(req, res);
+    return await getUsers(req, res);
   }
 
   if (req.method === 'POST') {
-    await createUser(req, res);
+    return await createUser(req, res);
   }
+
+  res.setHeader('Allow', ['GET', 'POST']);
+  return res.status(405).json({ message: `Method ${req.method} Not Allowed` });
 }

@@ -39,7 +39,7 @@ const SEO = ({ title, description, keywords, noIndex = false }: SeoProps) => {
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:creator" content={config.seo.twitter} />
-      <meta name="twitter:image" content={`${config.url}images/twitter-card-default.png`} />
+      <meta name="twitter:image" content={`${config.url?.replace(/\/$/, '')}/images/twitter-card-default.png`} />
       
       <meta property="og:title" content={title} />
       <meta property="og:url" content={config.url} />

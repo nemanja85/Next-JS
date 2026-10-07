@@ -73,7 +73,8 @@ export const setAuthCookie = (req: NextApiRequest, res: NextApiResponse, token: 
     path: '/',
     sameSite: 'lax',
     httpOnly: true,
-    maxAge: 86400, // day in seconds
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: 3600, // 1 hour in seconds, aligned with JWT expiration
   });
 };
 

@@ -1,6 +1,7 @@
 import SEO from '@components/SEO/SEO';
 import { useApp } from '@context/AppContext';
 import { yupResolver } from '@hookform/resolvers/yup';
+import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { object, ref, string } from 'yup';
 
@@ -11,7 +12,7 @@ type RegisterRequest = {
 };
 
 const schema = object({
-  email: string().required('Email is required'),
+  email: string().required('Email is required').email('Invalid email address'),
   password: string().required('Password is required'),
   passwordConfirmation: string()
     .oneOf([ref('password')], 'Passwords must match')
@@ -41,8 +42,12 @@ const Register = () => {
       },
     });
 
-    if (response.status > 400) {
-      setMessage((await response.json()).message);
+    const data = await response.json();
+
+    if (!response.ok) {
+      const errorMsg =
+        data.message || (data.errors && data.errors[0]?.message) || 'Registration failed';
+      setMessage(errorMsg);
       setNotificationType('error');
 
       setTimeout(() => resetNotification(), 1500);
@@ -50,8 +55,6 @@ const Register = () => {
     }
 
     if (response.status === 201) {
-      const data = (await response.json()) as { id: number };
-      console.log(data.id);
       reset();
     }
   };
@@ -131,10 +134,10 @@ const Register = () => {
           </div>
 
           <div className="mt-6 text-grey-dark">
-            Already have an account?
-            <a className="no-underline border-b border-blue text-blue" href="../login/">
+            Already have an account?{' '}
+            <Link className="no-underline border-b border-blue text-blue" href="/">
               Log in
-            </a>
+            </Link>
             .
           </div>
         </div>

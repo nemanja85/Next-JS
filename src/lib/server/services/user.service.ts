@@ -13,6 +13,14 @@ export type UpdateUserData = {
   password: string;
 };
 
+export const defaultUserSelect = {
+  id: true,
+  email: true,
+  role: true,
+  createdAt: true,
+  updatedAt: true,
+};
+
 export const findManyUsers = async (fields?: string) => {
   if (fields) {
     const columns = fields.split(',').filter(Boolean) as Array<keyof User>;
@@ -24,14 +32,17 @@ export const findManyUsers = async (fields?: string) => {
     }
   }
 
-  return prisma.user.findMany();
+  return prisma.user.findMany({
+    select: defaultUserSelect,
+  });
 };
 
-export const findUserById = async (id: number): Promise<User | null> => {
+export const findUserById = async (id: number) => {
   return prisma.user.findFirst({
     where: {
       id,
     },
+    select: defaultUserSelect,
   });
 };
 

@@ -17,7 +17,13 @@ type Payload = {
 
 const Home: NextPage = () => {
   const router = useRouter();
-  const { persistUser } = useApp();
+  const {
+    persistUser,
+    message,
+    hasMessage,
+    notificationType,
+    mapColors,
+  } = useApp();
 
   const {
     register,
@@ -55,6 +61,20 @@ const Home: NextPage = () => {
         </div>
       </div>
       <div className="w-full p-12">
+        {hasMessage && (
+          <div className="container flex justify-center mx-auto mb-4">
+            <div
+              data-cy="notificationContainer"
+              className={`w-1/2 p-5 border-2 border-gray-800 rounded-xl ${mapColors(
+                notificationType!
+              )} dark:border-gray-200`}
+            >
+              <p data-cy="notificationMessage" className="text-center text-gray-800 dark:text-gray-100">
+                {message}
+              </p>
+            </div>
+          </div>
+        )}
         <div className="container flex justify-center mx-auto">
           <div className="w-1/2 p-12 bg-white dark:bg-gray-800">
             <form onSubmit={handleSubmit(onSubmit)}>
