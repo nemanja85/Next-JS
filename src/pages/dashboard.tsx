@@ -23,9 +23,7 @@ const Dashboard: NextPage<DashboardProps> = ({ todos }) => {
   return (
     <>
       <div className="container mx-auto">
-        <Link href="/">
-          <a>Login</a>
-        </Link>
+        <Link href="/">Login</Link>
 
         <button className="px-4 py-2 text-gray-100 bg-red-500 rounded" onClick={fetchUsers}>
           Refresh

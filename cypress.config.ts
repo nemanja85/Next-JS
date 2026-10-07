@@ -3,7 +3,7 @@ import { prisma } from '@lib/prisma';
 
 export default defineConfig({
   e2e: {
-    baseUrl: 'http://localhost:3005',
+    baseUrl: 'http://localhost:3000',
     specPattern: 'tests/e2e/**/*.spec.ts',
     supportFile: 'tests/support/index.ts',
     fixturesFolder: 'tests/fixtures',

@@ -9,7 +9,7 @@
     "lint": "next lint",
     "cypress": "cypress open",
     "test": "cypress run",
-    "e2e": "start-server-and-test start http://localhost:3000 cypress"
+    "e2e": "start-server-and-test start http://localhost:3000 test"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.9.1",
